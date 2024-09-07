@@ -1,6 +1,13 @@
 ﻿@model ProductListViewModel
 
-    @foreach (var p in Model.Products)
+<h5>Index Page</h5>
+
+@if (Model.Products.Count() == 0)
+{
+    <p>Ürün bulunamadı.</p>
+}
+
+@foreach (var p in Model.Products)
 {
     <div>
         <h4>@p.Name</h4>
@@ -8,4 +15,8 @@
         <p>@p.Price</p>
     </div>
 }
-<h5>Index Page</h5>
+
+@for (var i = 1; i <= Model.PageInfo.TotalPages; i++)
+{
+    <a href="/?page=@i">@i</a>
+}
