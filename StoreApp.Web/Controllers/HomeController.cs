@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StoreApp.Data.Abstract;
 using StoreApp.Web.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace StoreApp.Web.Controllers
 {
@@ -14,28 +16,23 @@ namespace StoreApp.Web.Controllers
         }
 
         //localhost:5000/?page=1
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(string category, int page = 1)
         {
-            var products = _storeRepository
-                .Products
-                .Skip((page - 1) * pageSize) // 1-1 => 0 * 3 = 0 taneyi al  ,  2-1 => 1*3 = 3 taneyi al  ,  3-1 => 2*3 = 6 taneyi al vs.vs.  "skip, öteleme methodu"
-                .Select(p =>
+            return View(new ProductListViewModel
+            {
+                Products = _storeRepository.GetProductsByCategory(category, page, pageSize).Select(p =>
                 new ProductViewModel
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     Price = p.Price
-                }).Take(pageSize);
-
-            return View(new ProductListViewModel
-            {
-                Products = products,
+                }),
                 PageInfo = new PageInfo
                 {
                     ItemsPerPage = pageSize,
                     CurrentPage = page,
-                    TotalItems = _storeRepository.Products.Count()
+                    TotalItems = _storeRepository.GetProductCount(category)
                 }
             });
         }
