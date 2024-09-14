@@ -18,10 +18,13 @@ builder.Services.AddDbContext<StoreDbContext>(options =>
 });
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
 app.UseStaticFiles();
+app.UseSession();
 
 // products/telefon kategori urun listesi
 app.MapControllerRoute("product_in_category", "products/{category?}", new { controller = "Home", action = "Index" });
