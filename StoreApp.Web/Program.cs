@@ -7,6 +7,7 @@ using System.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
@@ -29,5 +30,6 @@ app.MapControllerRoute("product_in_category", "products/{category?}", new { cont
 app.MapControllerRoute("product_details", "{name}", new { controller = "Home", action = "Details" });
 
 app.MapDefaultControllerRoute();
+app.MapRazorPages();
 
 app.Run();
